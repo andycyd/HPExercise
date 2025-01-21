@@ -3,7 +3,7 @@ const { fetchAlbumsFromItunes } = require('../services/albumService');
 const NodeCache = require('node-cache');
 const cache = new NodeCache({ stdTTL: cacheTTS });
 
-const getAlbums = async (req, res) => {
+const getAlbums = async (req, res, next) => {
     const { artist } = req.query;
 
     const cachedData = cache.get(artist.toLowerCase());
@@ -23,7 +23,7 @@ const getAlbums = async (req, res) => {
     } 
     catch (error) {
         console.error('Error fetching albums:', error.message);
-        res.status(500).json({ message: 'An error occurred while fetching albums' });
+        next(error);
     }
 };
 

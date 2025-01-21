@@ -19,5 +19,10 @@ app.get('/', (req, res) => {
   res.send('HP Exercise api');
 });
 
+app.use((err, req, res, next) => {
+  console.error({ request: req, error: err });
+  res.status(500).json({ message: 'An internal server error occurred' });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Running on port ${PORT}`));
