@@ -43,6 +43,21 @@ describe('GET /api/albums', () => {
         expect(response.body[0].title).toBe('Album Title');
     });
 
+    it('should return a list of albums filtering duplicates by album name', async () => {
+        fetchAlbumsFromItunes.mockResolvedValue([
+            { artist: 'Artist', title: 'Album Title', releaseDate: '2025-01-21', genre: 'Pop', artwork: 'image_url' },
+            { artist: 'Artist', title: 'Album Title', releaseDate: '2025-01-21', genre: 'Pop', artwork: 'image_url' },
+            { artist: 'Artist different', title: 'Album Title', releaseDate: '2025-01-21', genre: 'Rock', artwork: 'image_url' }
+        ]);
+
+        const response = await request(app).get('/api/albums?artist=SomeArtist');
+
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveLength(1);
+        expect(response.body[0].artist).toBe('Artist');
+        expect(response.body[0].title).toBe('Album Title');
+    });
+
     it('should return 500 if the iTunes API call fails', async () => {
         fetchAlbumsFromItunes.mockImplementation(() => {
             throw new Error('Failed to fetch albums');
