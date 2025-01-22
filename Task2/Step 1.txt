@@ -1,0 +1,21 @@
+● What do you think is wrong with the code, if anything?
+    - I'd suggest to move "https://url.to.auth.system.com/invitation" to a config file or env file and load it from there
+    - Using vars instead of consts
+    - Too long function with more than one repsonsability
+    - more than one variable with the same name (err)
+    - unused declared variables
+    - no case for any other response code than 200 or 201
+    - I'd challenge if 500 is the correct code for shop not found
+    - Exposing internal messages in the response (line 22 returns err if exist: return res.status(500).send(err || { message: 'No shop found' });)
+    - Line 21 (if (err || !shop) ) is mixing error and not found. Provably would be better to split this 
+    - I'd suggest http response code 409 (conflict) for the case when the invitation already exists    
+    - In my opinion, using callbacks for both the push and the DB connection adds unnecesary complexity to the code
+    - There's no log at all
+● Can you see any potential problems that could lead to exceptions
+    I'm not yet that familiar with node so I can't tell. The only thing that got my attention is that the code is calling an external api and also querying the DB, which might end up in exceptions, and it's not being handled
+● How would you refactor this code to:
+    ○ Make it easier to read
+    ○ Increase code reusability
+    ○ Improve the stability of the system
+    ○ Improve the testability of the code
+● How might you use the latest JavaScript features to refactor the code?
